@@ -1,0 +1,111 @@
+---
+name: gsd-[command-name]
+description: [One-line description of what this skill does]
+type: standard
+---
+
+# GSD [Command Name]
+
+## Objective
+
+[What this skill accomplishes - clear, specific goal]
+
+## Context
+
+### Prerequisites
+- [List any required files, state, or setup]
+- [e.g., "Git repository initialized"]
+- [e.g., ".planning/PROJECT.md exists"]
+
+### References
+@[File references using kimi-cli @-syntax]
+@[e.g., @~/.kimi/gsd/workflows/[workflow-name].md]
+@[e.g., @.planning/PROJECT.md (if exists)]
+
+## Process
+
+### Step 1: [Step Name]
+
+**Action:** [What to do]
+
+**Commands:**
+```bash
+[bash commands to run]
+```
+
+**Verification:**
+- [ ] [Check 1]
+- [ ] [Check 2]
+
+### Step 2: [Step Name]
+
+**Action:** [What to do]
+
+**Code:**
+```python
+[code if needed]
+```
+
+**Verification:**
+- [ ] [Check]
+
+### Step N: [Final Step]
+
+**Action:** [Completion action]
+
+**Verification:**
+- [ ] All previous steps complete
+- [ ] Output matches expected
+
+## Subagent Tasks (if applicable)
+
+<task type="auto">
+  <name>[Subagent Task Name]</name>
+  <description>[What the subagent should do]</description>
+  <action>
+    Task(
+      description="[Brief description]",
+      subagent_name="[subagent-name]",
+      prompt="""
+      [Detailed prompt for the subagent]
+      
+      [Context it needs]
+      [What to produce]
+      [Success criteria]
+      """
+    )
+  </action>
+</task>
+
+## Success Criteria
+
+- [ ] [Criterion 1 - measurable]
+- [ ] [Criterion 2 - measurable]
+- [ ] [Criterion 3 - measurable]
+
+## Output
+
+### Files Created/Modified
+- `.planning/[file1]` - [Description]
+- `.planning/[file2]` - [Description]
+
+### Next Steps
+After this skill completes:
+```
+/skill:gsd-[next-command]
+```
+
+## Error Handling
+
+### If [Error Condition]
+**Action:** [What to do]
+**Alternative:** [Fallback approach]
+
+### If [Another Error]
+**Action:** [Resolution]
+
+## Notes
+
+- [Important implementation note 1]
+- [Important implementation note 2]
+- [GSD-specific conventions to follow]

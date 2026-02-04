@@ -1,0 +1,57 @@
+{
+  "name": "gsd-kimi-cli",
+  "version": "2.0.0",
+  "description": "Get Shit Done (GSD) - Spec-driven development workflow system for Kimi CLI",
+  "main": "scripts/install.js",
+  "bin": {
+    "gsd-kimi-install": "scripts/install.js",
+    "gsd-kimi-patch": "scripts/patch.js",
+    "gsd-kimi-verify": "scripts/verify.js"
+  },
+  "scripts": {
+    "install": "node scripts/install.js",
+    "patch": "node scripts/patch.js",
+    "verify": "node scripts/verify.js",
+    "test": "node scripts/test.js",
+    "uninstall": "node scripts/uninstall.js"
+  },
+  "keywords": [
+    "gsd",
+    "get-shit-done",
+    "kimi",
+    "kimi-cli",
+    "workflow",
+    "spec-driven",
+    "development",
+    "ai-assisted",
+    "project-management",
+    "multi-agent"
+  ],
+  "author": "Optivent <your-email@example.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/optivent/gsd-kimi-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/optivent/gsd-kimi-cli/issues"
+  },
+  "homepage": "https://github.com/optivent/gsd-kimi-cli#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "files": [
+    "skills/",
+    "agents/",
+    "references/",
+    "workflows/",
+    "patches/",
+    "scripts/",
+    "templates/",
+    "docs/",
+    "README.md",
+    "LICENSE",
+    "gsd-agent.yaml"
+  ],
+  "preferGlobal": true
+}
