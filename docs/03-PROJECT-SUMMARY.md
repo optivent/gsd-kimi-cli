@@ -24,6 +24,69 @@ KIMI-GSD-EX solves all of this:
 
 ---
 
+## 🏗️ Development Strategy: Stable Base
+
+**We use the GSD-patched kimi-cli as our stable development and testing platform.**
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  STABLE: GSD-Patched kimi-cli (Python) - ALREADY WORKING    │
+│  ├── Current working implementation                         │
+│  ├── Reference for behavior and edge cases                  │
+│  ├── Testing platform for Elixir components                 │
+│  └── Fallback during development                            │
+└─────────────────────────────────────────────────────────────┘
+                              ↓
+┌─────────────────────────────────────────────────────────────┐
+│  DEVELOPMENT: Elixir Fork (kimi_gsd_ex/)                    │
+│  ├── Built alongside stable version                         │
+│  ├── Tested via stable CLI integration                      │
+│  ├── Feature parity verified continuously                   │
+│  └── Incremental migration path                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Benefits
+
+1. **Reference Implementation**
+   - Working GSD features to study and replicate
+   - Behavior expectations clearly defined
+   - Edge cases already discovered
+
+2. **Incremental Development**
+   - Build Elixir components one at a time
+   - Test against stable Python implementation
+   - Verify parity before swapping
+
+3. **Risk Mitigation**
+   - Always have working fallback
+   - Can compare outputs side-by-side
+   - No "big bang" rewrite risk
+
+4. **Testing Platform**
+   - Run Elixir services from within stable CLI
+   - Validate via `/skill:gsd-*` commands
+   - Real-world usage during development
+
+### How We Use Stable CLI
+
+```bash
+# Terminal 1: Stable GSD-patched kimi-cli (always available)
+$ cd /Users/aig/kimi_gsd
+$ jim
+/skill:gsd-progress              # Check current state
+/skill:gsd-execute-flow          # Execute plans
+/skill:gsd-verify-work           # Verify completion
+
+# Terminal 2: Elixir development (building alongside)
+$ cd ~/kimi_gsd_ex
+$ mix test                       # Test Elixir code
+$ mix test.parity                # Compare with stable
+$ iex -S mix                     # Interactive development
+```
+
+---
+
 ## 📋 What We Built Today
 
 ### 1. Project Definition
@@ -31,6 +94,7 @@ KIMI-GSD-EX solves all of this:
 
 - Vision & mission
 - Target users & success metrics
+- **Development strategy: Stable base approach**
 - Differentiation strategy
 
 ### 2. 6-Month Roadmap
@@ -50,243 +114,178 @@ KIMI-GSD-EX solves all of this:
 **File:** `.planning/phases/03-elixir-fork/01-01-PLAN.md`
 
 **Tasks:**
-1. **Architecture Design** - ADRs, supervision trees, domain design
-2. **Development Environment** - Umbrella app, tooling, Docker
-3. **CI/CD Pipeline** - GitHub Actions, testing, quality gates
-4. **Documentation Framework** - ExDoc, ADRs, auto-publishing
+1. **Architecture Design** - Study stable GSD, design Elixir equivalent
+2. **Development Environment** - Umbrella app, tooling, integration with stable CLI
+3. **CI/CD Pipeline** - GitHub Actions, testing, parity checks
+4. **Documentation Framework** - ExDoc, ADRs, stable behavior documentation
 
-**Deliverables:**
-- Architecture approved
-- Dev env <30 min setup
-- CI/CD green
-- Team ready
+**Key Innovation:**
+- Reference analysis: Document how stable Python GSD works
+- Parity testing: Continuous comparison with stable implementation
+- Side-by-side development: Run both versions simultaneously
 
 #### Phase 2: Core Engine (13-17 days)
 **File:** `.planning/phases/03-elixir-fork/02-01-PLAN.md`
 
 **Tasks:**
-1. **Session Management** - GenServer, registry, persistence
-2. **LLM Gateway** - Streaming, pooling, caching, circuit breaker
-3. **Context Management** - Tokens, files, smart truncation
-4. **Terminal UI** - Ratatouille, input handling, status bar
+1. **Session Management** - GenServer, persistence (compare with stable)
+2. **LLM Gateway** - Streaming, pooling, caching (build alongside)
+3. **Context Management** - Tokens, files (verify parity)
+4. **Terminal UI** - Ratatouille (test from stable CLI)
 
-**Deliverables:**
-- 10-message conversations work
-- Sessions survive crashes
-- Streaming LLM responses
-- Context awareness
-
----
-
-## 🎯 Extreme Thinking Applied
-
-### Architecture Decisions
-
-**Umbrella App Structure:**
-```
-kimi_gsd_ex/
-├── apps/
-│   ├── kimi_core/      # Chat, context, LLM
-│   ├── kimi_gsd/       # GSD native
-│   ├── kimi_skills/    # Skills framework
-│   ├── kimi_ui/        # Terminal + Web
-│   └── kimi_cli/       # Entry point
-```
-
-**Why:** 
-- Clear separation of concerns
-- Independent deployment
-- Team scalability
-
-**OTP Supervision:**
-```
-Application Supervisor
-├── Session Supervisor (Dynamic)
-│   └── Session Processes (1000s)
-├── GSD Supervisor
-│   ├── Project Registry
-│   ├── State Managers
-│   └── File Watchers
-├── Skills Supervisor (Dynamic)
-│   └── Skill Processes
-└── LLM Gateway
-    ├── Connection Pool
-    └── Cache
-```
-
-**Why:**
-- Fault isolation
-- Self-healing
-- Horizontal scaling
-
-**Technology Stack:**
-| Layer | Technology | Why |
-|-------|------------|-----|
-| Core | Elixir/OTP | Concurrency, reliability |
-| UI | Ratatouille | Terminal UI |
-| Web | Phoenix LiveView | Real-time dashboard |
-| PubSub | Phoenix.PubSub | Event-driven |
-| Registry | Horde | Distributed |
-| Testing | ExUnit | Native |
-| Docs | ExDoc | Native |
+**Testing Strategy:**
+- Run Elixir components from stable CLI
+- Compare outputs (should match stable behavior)
+- Performance benchmarks (should beat stable)
 
 ---
 
-## 📊 Success Metrics
+## ⚡ Extreme Architecture
 
-### Performance
-- **1000+ concurrent agents**
-- **<50ms response time**
-- **99.99% uptime**
-- **Zero data loss**
+```
+KIMI-GSD-EX (Pure Elixir/OTP)
+├── kimi_core/       # Chat, context, LLM gateway
+├── kimi_gsd/        # Native GSD (GenServer, PubSub)
+├── kimi_skills/     # DynamicSupervisor for skills
+├── kimi_ui/         # Terminal + Web dashboard
+└── kimi_cli/        # Entry point
 
-### User Experience
-- **<1 week learning curve**
-- **<30 min setup time**
-- **Real-time collaboration**
-- **Cross-device sessions**
-
-### Development
-- **80%+ test coverage**
-- **<100ms build time**
-- **Automated releases**
-- **Living documentation**
-
----
-
-## ⚡ Key Differentiators
-
-### 1. Telecom-Grade Reliability
-Built on Erlang/OTP (powers WhatsApp, Discord):
-- Self-healing processes
-- Hot code reloading
-- Distributed by design
-
-### 2. Massive Concurrency
-Lightweight processes (not threads):
-- 1000+ agents at once
-- No GIL limitation
-- True parallelism
-
-### 3. Real-Time Everything
-Event-driven architecture:
-- 0ms update latency
-- Live collaboration
-- PubSub broadcasts
-
-### 4. Stateful Sessions
-GenServer persistence:
-- Survive crashes
-- Cross-device resume
-- Audit trail
-
----
-
-## 🛣️ The Path Forward
-
-### Immediate (This Week)
-1. ✅ Planning complete
-2. ⏳ Review architecture with team
-3. ⏳ Set up development environment
-4. ⏳ Begin Phase 1 execution
-
-### Short-term (Month 1)
-1. Complete Phase 1 (Bootstrap)
-2. Complete Phase 2 (Core Engine)
-3. Have working chat system
-
-### Medium-term (Month 3)
-1. GSD fully integrated
-2. 20+ skills working
-3. Team collaboration functional
-
-### Long-term (Month 6)
-1. Public launch
-2. Web dashboard live
-3. Full ecosystem
+Supervision Tree:
+├── Session Supervisor (1000s of sessions)
+├── GSD Supervisor (state, file watchers)
+├── Skills Supervisor (parallel execution)
+└── LLM Gateway (pooling, caching)
+```
 
 ---
 
 ## 💰 Investment Required
 
-### Time
-- **6 months** to launch
-- **2-3 developers** full-time
-- **~5000 lines** of Elixir code
-
-### Skills Needed
-- Elixir/OTP expertise
-- Phoenix/LiveView (for web)
-- Distributed systems knowledge
-- DevOps (CI/CD, deployment)
-
-### Infrastructure
-- GitHub organization
-- CI/CD minutes
-- Hosting (for distributed features)
-- Domain, documentation hosting
+| Resource | Requirement |
+|----------|-------------|
+| **Time** | 6 months |
+| **Team** | 2-3 Elixir developers |
+| **Code** | ~5,000 lines Elixir |
+| **Stable Base** | GSD-patched kimi-cli (already available) |
 
 ---
 
 ## 🎁 Expected Outcomes
 
-### For Users
-- 10x faster parallel execution
-- Never lose work again
-- Real-time team collaboration
-- Works across all devices
-
-### For Developers
-- Clean, maintainable codebase
-- Hot reloading for fast iteration
-- Excellent observability
-- Easy to extend
-
-### For Business
-- Differentiated product
-- Competitive moat (technology)
-- Scalable architecture
-- Team productivity boost
+- **10x faster** parallel execution
+- **Never lose work** (stateful sessions)
+- **Real-time collaboration** (team sync)
+- **Cross-device** (resume anywhere)
+- **Bulletproof reliability** (OTP supervision)
 
 ---
 
-## 🔥 Why This Is Exciting
+## 🧪 Testing & Verification
 
-This isn't just a rewrite. It's a **fundamental reimagining** of what an AI development tool can be:
+### Parity Testing
+```elixir
+# Continuously verify Elixir matches stable Python
+defmodule GSD.ParityTest do
+  use ExUnit.Case
+  
+  test "context loading matches stable implementation" do
+    stable = run_python_gsd_context()
+    elixir = GSD.Context.load()
+    
+    assert elixir.phase == stable.phase
+    assert elixir.project == stable.project
+    assert elixir.todos_total == stable.todos_total
+  end
+end
+```
 
-- **From:** Single-user, single-machine, fragile
-- **To:** Multi-user, distributed, bulletproof
+### Side-by-Side Development
+```
+Terminal 1 (Stable):  jim → /skill:gsd-progress
+Terminal 2 (Elixir):  iex -S mix → GSD.Context.load()
+Comparison:          Outputs should match!
+```
 
-- **From:** Polling, waiting, losing context
-- **To:** Real-time, instant, persistent
+---
 
-- **From:** Sequential, slow, limited
-- **To:** Parallel, fast, unlimited
+## 📦 Pushed to GitHub
 
-This is the **WhatsApp of AI development tools**.
+```
+4bd45bc docs: Add KIMI-GSD-EX comprehensive project plan
+b02dbe7 docs: Add Phase 2 research
+```
+
+**Repository:** https://github.com/optivent/gsd-kimi-cli
+
+---
+
+## 🚀 Ready to Execute?
+
+### Immediate Next Steps:
+
+1. **Review the plan** - Does stable base approach match your vision?
+2. **Verify stable CLI** - Confirm `/skill:gsd-progress` works
+3. **Assemble team** - Find 2-3 Elixir developers
+4. **Begin Phase 1** - Architecture with reference to stable GSD
+
+### Development Workflow:
+
+```bash
+# 1. Start stable CLI (Terminal 1)
+$ cd /Users/aig/kimi_gsd && jim
+
+# 2. Set up Elixir dev (Terminal 2)
+$ mkdir -p ~/kimi_gsd_ex && cd ~/kimi_gsd_ex
+# Create umbrella app, set up tooling
+
+# 3. Iterate with parity testing
+$ mix test.parity  # Compare with stable
+```
+
+---
+
+## 🔥 Why This Approach Wins
+
+**Traditional Rewrite:**
+- ❌ Stop using old version while building new
+- ❌ No reference for "correct" behavior
+- ❌ Big bang switchover (risky)
+- ❌ Bugs only discovered after launch
+
+**Stable Base Approach:**
+- ✅ Keep using working version
+- ✅ Clear reference implementation
+- ✅ Incremental migration (safe)
+- ✅ Parity verified continuously
+
+**You always have:**
+- ✅ Working GSD (stable CLI)
+- ✅ Clear target behavior (reference)
+- ✅ Safe fallback (never broken)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-kimi_gsd/
-├── .planning/
-│   ├── PROJECT.md              # Vision & scope
-│   ├── ROADMAP.md              # 6-month roadmap
-│   ├── STATE.md                # Current state
-│   ├── 03-PROJECT-SUMMARY.md   # This file
+kimi_gsd/                          # STABLE BASE (Python)
+├── .planning/                     # GSD state (shared)
+│   ├── PROJECT.md
+│   ├── ROADMAP.md
+│   ├── STATE.md
 │   └── phases/
-│       └── 03-elixir-fork/
-│           ├── 01-01-PLAN.md   # Bootstrap
-│           └── 02-01-PLAN.md   # Core Engine
-│
-├── gsd-kimi-cli/               # Original Python project
-│   ├── patches/
-│   ├── skills/
-│   └── docs/
-│
-└── .kimi-todos.json            # Project todos
+├── gsd-kimi-cli/                  # Patches (reference)
+└── .kimi-todos.json
+
+~/kimi_gsd_ex/                     # DEVELOPMENT (Elixir)  
+├── apps/
+│   ├── kimi_core/
+│   ├── kimi_gsd/
+│   ├── kimi_skills/
+│   ├── kimi_ui/
+│   └── kimi_cli/
+├── config/
+└── mix.exs
 ```
 
 ---
@@ -298,25 +297,25 @@ kimi_gsd/
 - [x] Phase 1 & 2 planned
 - [x] Architecture designed
 - [x] Success metrics set
-- [x] Team identified (2-3 Elixir devs)
+- [x] **Stable base identified (GSD-patched CLI)**
+- [x] **Parity testing strategy defined**
+- [ ] Team identified (2-3 Elixir devs)
 - [ ] Budget approved
 - [ ] Timeline committed
 - [ ] First sprint planned
 
 ---
 
-## 🚀 Next Steps
+## 🎯 Summary
 
-1. **Review this plan** - Does it match your vision?
-2. **Assemble team** - Find 2-3 Elixir developers
-3. **Set up environment** - Begin Phase 1 execution
-4. **First sprint** - Architecture + dev environment
-5. **Iterate** - Build, test, refine
+**This is not just a rewrite. It's a strategic evolution:**
 
----
+1. **Stable Foundation** - GSD-patched CLI (working today)
+2. **Reference Target** - Behavior to replicate and improve
+3. **Incremental Build** - Elixir alongside, not instead
+4. **Continuous Parity** - Always match stable behavior
+5. **Safe Migration** - No big bang, no risk
 
 **Ready to build the future of AI development?**
 
-This is ambitious. This is hard. But this is **worth it**.
-
-Let's make it happen. 🚀
+With a stable base, clear reference, and incremental approach - **this will succeed**. 🚀
